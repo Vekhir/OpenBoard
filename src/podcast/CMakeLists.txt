@@ -7,8 +7,6 @@ target_sources(${PROJECT_NAME} PRIVATE
     UBPodcastRecordingPalette.h
     intranet/UBIntranetPodcastPublisher.cpp
     intranet/UBIntranetPodcastPublisher.h
-    youtube/UBYouTubePublisher.cpp
-    youtube/UBYouTubePublisher.h
 )
 
 if(WIN32)
