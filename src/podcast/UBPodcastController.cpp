@@ -51,7 +51,6 @@
 
 #include "UBAbstractVideoEncoder.h"
 
-#include "podcast/youtube/UBYouTubePublisher.h"
 #include "podcast/intranet/UBIntranetPodcastPublisher.h"
 #include "UBPodcastRecordingPalette.h"
 
@@ -98,7 +97,6 @@ UBPodcastController::UBPodcastController(QObject* pParent)
     , mSmallVideoSizeAction(0)
     , mMediumVideoSizeAction(0)
     , mFullVideoSizeAction(0)
-    , mYoutubePublicationAction(0)
     , mIntranetPublicationAction(0)
 {
     connect(UBApplication::applicationController, SIGNAL(mainModeChanged(UBApplicationController::MainMode)),
@@ -174,7 +172,6 @@ void UBPodcastController::updateActionState()
         }
     }
 
-    UBSettings::settings()->podcastPublishToYoutube->set(mYoutubePublicationAction && mYoutubePublicationAction->isChecked());
     UBSettings::settings()->podcastPublishToIntranet->set(mIntranetPublicationAction && mIntranetPublicationAction->isChecked());
 
 }
@@ -693,12 +690,6 @@ void UBPodcastController::encodingFinished(bool ok)
                     UBIntranetPodcastPublisher* intranet = new UBIntranetPodcastPublisher(this); // Self destroyed
                     intranet->publishVideo(mVideoEncoder->videoFileName(), elapsedRecordingMs());
                 }
-
-                if (mYoutubePublicationAction && mYoutubePublicationAction->isChecked())
-                {
-                    UBYouTubePublisher* youTube = new UBYouTubePublisher(this); // Self destroyed
-                    youTube->uploadVideo(mVideoEncoder->videoFileName());
-                }
             }
         }
         else
@@ -942,12 +933,6 @@ QList<QAction*> UBPodcastController::podcastPublicationActions()
         mIntranetPublicationAction->setChecked(UBSettings::settings()->podcastPublishToIntranet->get().toBool());
 
         mPodcastPublicationActions << mIntranetPublicationAction;
-
-        mYoutubePublicationAction = new QAction(tr("Publish to Youtube"), this);
-        mYoutubePublicationAction->setCheckable(true);
-        mYoutubePublicationAction->setChecked(UBSettings::settings()->podcastPublishToYoutube->get().toBool());
-
-        mPodcastPublicationActions << mYoutubePublicationAction;
 
         foreach(QAction* publicationAction, mPodcastPublicationActions)
         {
