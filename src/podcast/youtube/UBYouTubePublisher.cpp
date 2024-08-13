@@ -65,33 +65,8 @@ UBYouTubePublisher::~UBYouTubePublisher()
 void UBYouTubePublisher::uploadVideo(const QString& videoFilePath)
 {
     mVideoFilePath = videoFilePath;
-
-    UBYouTubePublishingDialog pub(videoFilePath, UBApplication::mainWindow);
-
-    pub.title->setText(QFileInfo(mVideoFilePath).completeBaseName());
-    pub.keywords->setText(qApp->applicationName());
-
     QString defaultEMail = UBSettings::settings()->youTubeUserEMail->get().toString();
-    pub.email->setText(defaultEMail);
-
-    if (pub.exec() == QDialog::Accepted)
-    {
-        mTitle = pub.title->text();
-        mDescription = pub.description->toPlainText();
-        mCategories << pub.category->itemData(pub.category->currentIndex()).toString();
-        mKeywords = pub.keywords->text();
-
-        QString email = pub.email->text();
-        UBSettings::settings()->youTubeUserEMail->set(email);
-
-        QString password = pub.password->text();
-
-        postClientLoginRequest(email, password);
-    }
-    else
-    {
-        deleteLater();
-    }
+    deleteLater();
 }
 
 
@@ -310,102 +285,5 @@ void UBYouTubePublisher::progress (qint64 bytesSent, qint64 bytesTotal )
     int percentage = (((qreal)bytesSent / (qreal)bytesTotal ) * 100);
 
     UBApplication::showMessage(tr("Upload to YouTube in progress %1 %").arg(percentage), percentage < 100);
-}
-
-
-
-UBYouTubePublishingDialog::UBYouTubePublishingDialog(const QString& videoFilePath, QWidget *parent)
-    : QDialog(parent)
-{
-    Q_UNUSED(videoFilePath);
-
-    Ui::YouTubePublishingDialog::setupUi(this);
-
-    QMap<QString, QString> cats = categories();
-
-    category->clear();
-    int index = 0;
-    foreach(QString cat, cats.keys())
-    {
-        category->addItem(cats.value(cat), cat);
-        if(cat == "Education")
-            category->setCurrentIndex(index);
-
-        index++;
-    }
-
-    connect(dialogButtons, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(dialogButtons, SIGNAL(rejected()), this, SLOT(reject()));
-
-    connect(title, SIGNAL(textChanged(const QString&)), this, SLOT(updateUIState(const QString&)));
-    connect(description, SIGNAL(textChanged()), this, SLOT(updateUIState()));
-    connect(keywords, SIGNAL(textChanged(const QString&)), this, SLOT(updateUIState(const QString&)));
-
-    connect(email, SIGNAL(textChanged(const QString&)), this, SLOT(updateUIState(const QString&)));
-    connect(password, SIGNAL(textChanged(const QString&)), this, SLOT(updateUIState(const QString&)));
-    connect(youtubeCredentialsPersistence,SIGNAL(clicked()), this, SLOT(updateCredentialPersistenceState()));
-
-    dialogButtons->button(QDialogButtonBox::Ok)->setEnabled(false);
-    dialogButtons->button(QDialogButtonBox::Ok)->setText(tr("Upload"));
-
-    UBSettings* settings = UBSettings::settings();
-
-    email->setText(settings->youTubeUserEMail->get().toString());
-
-    youtubeCredentialsPersistence->setChecked(UBSettings::settings()->youTubeCredentialsPersistence->get().toBool());
-    updatePersistanceEnableState();
-}
-
-
-void UBYouTubePublishingDialog::updateCredentialPersistenceState()
-{
-    UBSettings::settings()->youTubeCredentialsPersistence->set(QVariant(youtubeCredentialsPersistence->checkState()));
-}
-
-void UBYouTubePublishingDialog::updatePersistanceEnableState()
-{
-    bool enabled = email->text().length() || password->text().length();
-    youtubeCredentialsPersistence->setEnabled(enabled);
-    youtubeCredentialsPersistence->setStyleSheet(enabled ? "color:black;" : "color : lightgrey;");
-}
-
-void UBYouTubePublishingDialog::updateUIState(const QString& string)
-{
-    Q_UNUSED(string);
-
-    bool ok = title->text().length() > 0
-            &&  description->toPlainText().length() > 0
-            &&  keywords->text().length() > 0
-            &&  email->text().length() > 0
-            &&  password->text().length() > 0;
-
-    dialogButtons->button(QDialogButtonBox::Ok)->setEnabled(ok);
-    updatePersistanceEnableState();
-}
-
-
-QMap<QString, QString> UBYouTubePublishingDialog::categories()
-{
-    // TODO UB 4.x download localized list from
-    // http://code.google.com/apis/youtube/2.0/reference.html#Localized_Category_Lists
-
-    QMap<QString, QString> cats;
-
-    cats.insert("Autos", tr("Autos & Vehicles"));
-    cats.insert("Music", tr("Music"));
-    cats.insert("Animals", tr("Pets & Animals"));
-    cats.insert("Sports", tr("Sports"));
-    cats.insert("Travel", tr("Travel & Events"));
-    cats.insert("Games", tr("Gaming"));
-    cats.insert("Comedy", tr("Comedy"));
-    cats.insert("People", tr("People & Blogs"));
-    cats.insert("News", tr("News & Politics"));
-    cats.insert("Entertainment", tr("Entertainment"));
-    cats.insert("Education", tr("Education"));
-    cats.insert("Howto", tr("Howto & Style"));
-    cats.insert("Nonprofit", tr("Nonprofits & Activism"));
-    cats.insert("Tech", tr("Science & Technology"));
-
-    return cats;
 }
 

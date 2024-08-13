@@ -32,8 +32,6 @@
 
 #include <QtGui>
 
-#include "ui_youTubePublishingDialog.h"
-
 class UBServerXMLHttpRequest;
 
 class UBYouTubePublisher : public QObject
@@ -78,25 +76,6 @@ class UBYouTubePublisher : public QObject
 
         UBServerXMLHttpRequest *mAuthRequest;
         UBServerXMLHttpRequest *mUploadRequest;
-
-};
-
-
-class UBYouTubePublishingDialog : public QDialog, public Ui::YouTubePublishingDialog
-{
-    Q_OBJECT;
-
-    public:
-        UBYouTubePublishingDialog(const QString& videoFilePath, QWidget *parent = 0);
-        ~UBYouTubePublishingDialog(){};
-
-    private:
-        QMap<QString, QString> categories();
-        void updatePersistanceEnableState();
-
-    private slots:
-        void updateUIState(const QString& = QString(""));
-        void updateCredentialPersistenceState();
 
 };
 
