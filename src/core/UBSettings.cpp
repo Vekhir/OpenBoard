@@ -431,10 +431,6 @@ void UBSettings::init()
     podcastWindowsMediaBitsPerSecond = new UBSetting(this, "Podcast", "WindowsMediaBitsPerSecond", 1700000);
     podcastQuickTimeQuality = new UBSetting(this, "Podcast", "QuickTimeQuality", "High");
 
-    podcastPublishToYoutube = new UBSetting(this, "Podcast", "PublishToYouTube", false);
-    youTubeUserEMail = new UBSetting(this, "YouTube", "UserEMail", "");
-    youTubeCredentialsPersistence = new UBSetting(this,"YouTube", "CredentialsPersistence",false);
-
     communityUser = new UBSetting(this, "Community", "Username", "");
     communityPsw = new UBSetting(this, "Community", "Password", "");
     communityCredentialsPersistence = new UBSetting(this,"Community", "CredentialsPersistence",false);
@@ -1421,9 +1417,6 @@ void UBSettings::cleanNonPersistentSettings()
         communityUser->set(QVariant(""));
     }
 
-    if(!youTubeCredentialsPersistence->get().toBool()){
-        youTubeUserEMail->set(QVariant(""));
-    }
     proxyUser->set(QVariant(""));
     proxyPsw->set(QVariant(""));
 }

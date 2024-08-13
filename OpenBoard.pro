@@ -76,7 +76,6 @@ FORMS += resources/forms/mainWindow.ui \
    resources/forms/documents.ui \
    resources/forms/blackoutWidget.ui \
    resources/forms/trapFlash.ui \
-   resources/forms/youTubePublishingDialog.ui \
    resources/forms/capturePublishing.ui \
    resources/forms/intranetPodcastPublishingDialog.ui
 
