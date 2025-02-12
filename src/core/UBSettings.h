@@ -372,10 +372,6 @@ class UBSettings : public QObject
         UBSetting* podcastAudioRecordingDevice;
         UBSetting* podcastQuickTimeQuality;
 
-        UBSetting* podcastPublishToYoutube;
-        UBSetting* youTubeUserEMail;
-        UBSetting* youTubeCredentialsPersistence;
-
         UBSetting* podcastPublishToIntranet;
         UBSetting* intranetPodcastPublishingUrl;
         UBSetting* intranetPodcastAuthor;

@@ -182,7 +182,6 @@ class UBPodcastController : public QObject
 
         QList<QAction*> mPodcastPublicationActions;
 
-        QAction *mYoutubePublicationAction;
         QAction *mIntranetPublicationAction;
 
         QString mPodcastRecordingPath;

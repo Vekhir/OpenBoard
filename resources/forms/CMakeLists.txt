@@ -8,5 +8,4 @@ target_sources(${PROJECT_NAME} PRIVATE
     mainWindow.ui
     preferences.ui
     trapFlash.ui
-    youTubePublishingDialog.ui
 )
