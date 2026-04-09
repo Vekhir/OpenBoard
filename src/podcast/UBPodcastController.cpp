@@ -157,7 +157,7 @@ void UBPodcastController::openPodcastPreferencesDialog()
        settings->podcastVideoSize->reset().toString();
     }
     const QString podcastProfile = settings->podcastVideoSize->get().toString();
-    mVideoFramesPerSecondAtStart = settings->podcastFramesPerSecond->get().toInt();
+    const int frameRate = settings->podcastFramesPerSecond->get().toInt();
     const int fullBitRate = settings->podcastWindowsMediaBitsPerSecond->get().toInt();
     const QSize viewportSize = UBApplication::boardController->controlView()->size();
 
@@ -173,7 +173,7 @@ void UBPodcastController::openPodcastPreferencesDialog()
                                                            podcastAudioRecordingDevice,
                                                            podcastProfileNames,
                                                            podcastProfile,
-                                                           mVideoFramesPerSecondAtStart,
+                                                           frameRate,
                                                            fullBitRate,
                                                            podcastBitRateDivisors,
                                                            podcastVerticalResolution,
@@ -198,11 +198,11 @@ void UBPodcastController::podcastPreferencesDialogAccepted()
     const QString podcastProfile = dialog->podcastProfile();
     settings->podcastVideoSize->set(podcastProfile);
 
-    mVideoBitsPerSecondAtStart = dialog->podcastBitRate();
-    settings->podcastWindowsMediaBitsPerSecond->set(QVariant::fromValue(mVideoBitsPerSecondAtStart));
+    const int fullBitRate = dialog->podcastBitRate();
+    settings->podcastWindowsMediaBitsPerSecond->set(QVariant::fromValue(fullBitRate));
 
-    mVideoFramesPerSecondAtStart = dialog->podcastFrameRate();
-    settings->podcastFramesPerSecond->set(mVideoFramesPerSecondAtStart);
+    const int frameRate = dialog->podcastFrameRate();
+    settings->podcastFramesPerSecond->set(frameRate);
 
     const bool podcastPublishToIntranet = dialog->podcastPublishToIntranet();
     UBSettings::settings()->podcastPublishToIntranet->set(podcastPublishToIntranet);
@@ -310,6 +310,7 @@ void UBPodcastController::start()
         QSize recommendedSize(1024, 768);
 
         UBSettings* settings = UBSettings::settings();
+        mVideoFramesPerSecondAtStart = settings->podcastFramesPerSecond->get().toInt();
         int fullBitRate = settings->podcastWindowsMediaBitsPerSecond->get().toInt();
         QString podcastProfile = settings->podcastVideoSize->get().toString();
 
