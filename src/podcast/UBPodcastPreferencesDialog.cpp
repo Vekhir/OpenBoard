@@ -334,7 +334,7 @@ void UBPodcastPreferencesDialog::resetDefaultSettings()
     setDefaultAudioDevice();
     mTabWidget->setCurrentIndex(mPodcastProfileNames.indexOf("Medium"));
     mBitRateSpinBox->setValue(1700000);
-    mFrameRateSpinBox->setValue(10);
+    mFrameRateSpinBox->setValue(100);
     mPublishToIntranet->setChecked(false);
     mPublishToYoutube->setChecked(false);
 }
