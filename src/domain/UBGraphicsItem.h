@@ -27,16 +27,40 @@
 
 
 
-#include "UBItem.h"
+#ifndef UBGRAPHICSITEM_H
+#define UBGRAPHICSITEM_H
 
-UBItem::UBItem()
-    : mUuid(QUuid::createUuid())
-    , mRenderingQuality(UBItem::RenderingQualityNormal)
-{
-    // NOOP
-}
+#include <QGraphicsItem>
 
-UBItem::~UBItem()
+#include "UBGraphicsItemDelegate.h"
+
+class UBGraphicsItem
 {
-    // NOOP
-}
+protected:
+    UBGraphicsItem() : mDelegate(NULL)
+    {
+        // NOOP
+    }
+    virtual ~UBGraphicsItem();
+    void setDelegate(UBGraphicsItemDelegate* mDelegate);
+
+public:
+    virtual int type() const = 0;
+
+    UBGraphicsItemDelegate *Delegate() const;
+
+    static void assignZValue(QGraphicsItem*, qreal value);
+    static bool isRotatable(QGraphicsItem *item);
+    static bool isFlippable(QGraphicsItem *item);
+    static bool isLocked(QGraphicsItem *item);
+    static bool isHiddenOnDisplay(QGraphicsItem *item);
+
+    static UBGraphicsItemDelegate *Delegate(QGraphicsItem *pItem);
+
+    void remove(bool canUndo = true);
+
+private:
+    UBGraphicsItemDelegate* mDelegate;
+};
+
+#endif // UBGRAPHICSITEM_H
